@@ -1,0 +1,17 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Print secret
+          command: |
+            # this will get redacted in the logs
+            echo "🔒 SECRET_TOKEN is $SECRET_TOKEN"
+workflows:
+  test:
+    jobs:
+      - build
