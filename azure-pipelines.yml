@@ -1,0 +1,37 @@
+# azure-pipelines.yml
+trigger:
+  branches:
+    include:
+      - main
+      - release/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  - task: Checkout@1
+    displayName: 'Checkout code'
+
+  - script: |
+      echo "Installing dependencies"
+      npm install
+    displayName: 'npm install'
+
+  - script: |
+      echo "Running build"
+      npm run build --if-present
+    displayName: 'Build'
+
+  - script: |
+      echo "Running tests"
+      npm test
+    displayName: 'Test'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'dist'
+      ArtifactName: 'drop'
+    displayName: 'Publish artifacts'
